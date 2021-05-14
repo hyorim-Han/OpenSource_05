@@ -14,7 +14,7 @@
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBHKwWkZu8kD9dIohi2D-oLLUtyOBdFILg"
+            android:value="자신이 받은 Google Map API 키 입력"
             />
 
         <activity android:name=".MainActivity">
