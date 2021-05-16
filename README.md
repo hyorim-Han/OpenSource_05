@@ -1,6 +1,6 @@
 # OpenSource_05 CO-A
-------------
 ### Google Map API KEY 발급
+1.
 + https://console.cloud.google.com/apis/dashboard 에 접속하여 프로젝트 만들기 클릭
 + 적당한 프로젝트 명을 적고 프로젝트 생성이 완료되면 ENABLE APIS AND SERVICES( API 및 사용 서비스 사용 설정) 클릭
 + maps sdk for android를 검색하여 Maps SDK for Android를 선택 후 사용 클릭
