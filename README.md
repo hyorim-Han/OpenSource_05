@@ -1,7 +1,7 @@
 # OpenSource_05 CO-A
 ### Google Map API KEY 발급
 1. https://console.cloud.google.com/apis/dashboard 에 접속하여 프로젝트 만들기 클릭
-2. 적당한 프로젝트 명을 적고 프로젝트 생성이 완료되면 ENABLE APIS AND SERVICES( API 및 사용 서비스 사용 설정) 클릭
+2. 적당한 프로젝트 명을 적고 프로젝트 생성이 완료되면<br>ENABLE APIS AND SERVICES( API 및 사용 서비스 사용 설정) 클릭
 3. maps sdk for android를 검색하여 Maps SDK for Android를 선택 후 사용 클릭
 4. 좌측 상단에 있는 탐색메뉴에서 
 > 메뉴
@@ -17,12 +17,10 @@
 + SHA-1 인증서 얻는 법
     + 윈도우 + R 눌러서 실행 창 열고 cmd 입력하여 명령프롬프트 창 출력
     + 아래 코드 복사해서 입력
-##### Window
-``` 
+``` Window
 "C:\Program Files\Android\Android Studio\jre\bin\keytool" -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
 ```
-##### Linux
-```
+``` Linux
 keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
 ```
  + 관련 정보가 나오면 SHA1 옆에 있는 문자열을 복사
