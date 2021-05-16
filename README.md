@@ -28,17 +28,17 @@ keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -sto
  + 관련 정보가 나오면 SHA1 옆에 있는 문자열을 복사
 + 프로젝트 패키지 이름은 MainActivity.java 1번줄에 있는 package 옆에 있는 com.# 을 복사해서 넣어준다.
 -------
+
 9. API 제한사항에서 키 제한을 선택하고 콤보박스에서 Maps SDK for Android를 체크 후 저장 클릭
 10. 생성된 API 키를 복사
 11. 프로젝트의 
 > app
 >> manifests
->>> AndroidManifest.xml 
+>>> AndroidManifest.xml 를 열고 중간에 아래 코드 입력
 ``` 
 <meta-data android:name="com.google.android.geo.API_KEY" 
 android:value="API키" /> 
 ``` 
-중간에 위의 코드 입력
 12. 메뉴에서 
 > Tools 
 >> SDK Manager 선택
