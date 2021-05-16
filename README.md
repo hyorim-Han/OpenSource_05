@@ -36,7 +36,9 @@ keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -sto
 └─app
     └─manifests
         └─AndroidManifest.xml
-들어가서 아래 코드 중간에 삽입
+```
+들어가서 아래의 코드를 중간에 삽입
+```
 <meta-data android:name="com.google.android.geo.API_KEY" 
 android:value="API키" /> 
 ``` 
