@@ -36,8 +36,7 @@ keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -sto
 └─app
     └─manifests
         └─AndroidManifest.xml
-```
-``` 
+<br>
 <meta-data android:name="com.google.android.geo.API_KEY" 
 android:value="API키" /> 
 ``` 
