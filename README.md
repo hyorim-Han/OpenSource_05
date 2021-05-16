@@ -17,10 +17,12 @@
 + SHA-1 인증서 얻는 법
     + 윈도우 + R 눌러서 실행 창 열고 cmd 입력하여 명령프롬프트 창 출력
     + 아래 코드 복사해서 입력
-``` Window
+#### Window
+```
 "C:\Program Files\Android\Android Studio\jre\bin\keytool" -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
 ```
-``` Linux
+#### Linux
+```
 keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
 ```
  + 관련 정보가 나오면 SHA1 옆에 있는 문자열을 복사
