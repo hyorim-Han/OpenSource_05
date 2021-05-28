@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity2">
+    tools:context=".Title">
 
     <ImageView
         android:id="@+id/imageView"
@@ -14,5 +14,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/title" /> // 이미지 링크 여기에 삽입
+        app:srcCompat="@drawable/title"
+        android:contentDescription="TODO" />
 </androidx.constraintlayout.widget.ConstraintLayout>
