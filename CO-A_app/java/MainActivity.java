@@ -1,4 +1,6 @@
-package com.cookandroid.project6_1;
+package com.example.openprofessionalproject;
+
+import android.graphics.Color;  //원생성 추가
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -35,6 +38,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.CircleOptions;  //원생성 추가
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -46,18 +50,18 @@ public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback{
 
-
+    int count = 9;
     private GoogleMap mMap;
     private Marker currentMarker = null;
 
     private static final String TAG = "googlemap_example";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int UPDATE_INTERVAL_MS = 1000;  // 1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
+    private static final int UPDATE_INTERVAL_MS = 10000;  // 10초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 10000; // 10초
 
 
     // onRequestPermissionsResult에서 수신된 결과에서 ActivityCompat.requestPermissions를 사용한 퍼미션 요청을 구별하기 위해 사용됩니다.
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
+    private static final int PERMISSIONS_REQUEST_CODE = 99999;
     boolean needRequest = false;
 
 
@@ -75,9 +79,11 @@ public class MainActivity extends AppCompatActivity
 
 
     private View mLayout;  // Snackbar 사용하기 위해서는 View가 필요합니다.
+    // (참고로 Toast에서는 Context가 필요했습니다.)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
@@ -92,20 +98,21 @@ public class MainActivity extends AppCompatActivity
                 .setInterval(UPDATE_INTERVAL_MS)
                 .setFastestInterval(FASTEST_UPDATE_INTERVAL_MS);
 
-
         LocationSettingsRequest.Builder builder =
                 new LocationSettingsRequest.Builder();
 
         builder.addLocationRequest(locationRequest);
-
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
         mapFragment.getMapAsync(this);
+
     }
+
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
@@ -114,8 +121,9 @@ public class MainActivity extends AppCompatActivity
         mMap = googleMap;
 
         //런타임 퍼미션 요청 대화상자나 GPS 활성 요청 대화상자 보이기전에
-        //지도의 초기위치를 서울로 이동
+        //지도의 초기위치를 충북대로 이동
         setDefaultLocation();
+
 
         //런타임 퍼미션 처리
         // 1. 위치 퍼미션을 가지고 있는지 체크합니다.
@@ -123,6 +131,7 @@ public class MainActivity extends AppCompatActivity
                 Manifest.permission.ACCESS_FINE_LOCATION);
         int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
+
 
 
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
@@ -164,7 +173,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         // 현재 오동작을 해서 주석처리
 
@@ -195,8 +203,9 @@ public class MainActivity extends AppCompatActivity
 
 
                 String markerTitle = getCurrentAddress(currentPosition);
-                String markerSnippet = "위도:" + String.valueOf(location.getLatitude())
-                        + " 경도:" + String.valueOf(location.getLongitude());
+                String markerSnippet = "\r위도:" + String.valueOf(location.getLatitude())
+                        + " \r경도:" + String.valueOf(location.getLongitude()
+                        + " \r인구 수:" + String.valueOf(count));
 
                 Log.d(TAG, "onLocationResult : " + markerSnippet);
 
@@ -342,22 +351,39 @@ public class MainActivity extends AppCompatActivity
         markerOptions.snippet(markerSnippet);
         markerOptions.draggable(true);
 
+        //원추가(원생성 추가)
+        CircleOptions circle50M = new CircleOptions().center(currentLatLng) //원점
+                .radius(50)      //반지름 단위 : m
+                .strokeWidth(1f)  //선너비 0f : 선없음
+                .fillColor(Color.parseColor("#0A69E1EF")); //배경색(투명도 4%)
 
+        if (count <= 5){
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+        }
+        else if (count <= 10){
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+        }
+        else {
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        }
         currentMarker = mMap.addMarker(markerOptions);
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
+        //원추가(원생성 추가)
+        //mMap.addCircle(circle50M);
+
+        //CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 19);
         mMap.moveCamera(cameraUpdate);
 
     }
 
-
     public void setDefaultLocation() {
 
 
-        //디폴트 위치, Seoul
-        LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
+        //디폴트 위치, 충북대
+        LatLng DEFAULT_LOCATION = new LatLng(36.62948021506917, 127.456369646301);
         String markerTitle = "위치정보 가져올 수 없음";
-        String markerSnippet = "위치 퍼미션과 GPS 활성 요부 확인하세요";
+        String markerSnippet = "위치 퍼미션과 GPS 활성 여부 확인하세요";
 
 
         if (currentMarker != null) currentMarker.remove();
@@ -370,7 +396,7 @@ public class MainActivity extends AppCompatActivity
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         currentMarker = mMap.addMarker(markerOptions);
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 16);
         mMap.moveCamera(cameraUpdate);
 
     }
@@ -394,6 +420,7 @@ public class MainActivity extends AppCompatActivity
         return false;
 
     }
+
 
 
     /*
@@ -464,13 +491,41 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //여기부터는 GPS 활성화를 위한 메소드들
+    public void onMapSearch(View view) {
+        EditText locationSearch = (EditText) findViewById(R.id.editText);
+        String location = locationSearch.getText().toString();
+        List<Address>addressList = null;
+
+        if (location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location, 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address address = addressList.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            String name = getCurrentAddress(currentPosition);
+            String position = "\r위도:" + String.valueOf(address.getLatitude())
+                    + "\r경도:" + String.valueOf(address.getLongitude());
+
+            mMap.addMarker(new MarkerOptions().position(latLng).title(name));
+            mMap.addMarker(new MarkerOptions().position(latLng).title(position));
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
+    }
+
+
+
+    //GPS 활성화를 위한 메소드들
     private void showDialogForLocationServiceSetting() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
-                + "위치 설정을 수정하실래요?");
+                + "위치 설정을 수정하시겠습니까?");
         builder.setCancelable(true);
         builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
             @Override
@@ -514,4 +569,6 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
     }
+
+
 }
